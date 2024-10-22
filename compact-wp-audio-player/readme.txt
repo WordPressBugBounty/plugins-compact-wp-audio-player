@@ -3,8 +3,8 @@ Contributors: Tips and Tricks HQ, mbrsolution
 Donate link: https://www.tipsandtricks-hq.com/development-center
 Tags: audio, audio player, embed, media, media player, mp3, mp3 player, music, music player, podcast
 Requires at least: 5.0
-Tested up to: 6.6
-Stable tag: 1.9.13
+Tested up to: 6.7
+Stable tag: 1.9.14
 License: GPLv2 or later
 
 A Compact WP Audio Player Plugin that is compatible with all major browsers and devices (Android, iPhone, iPad)
@@ -67,6 +67,10 @@ Yes
 None
 
 == Changelog ==
+
+= 1.9.14 =
+- Added output escaping to the fileurl shortcode parameter.
+- Refactored the autoplay JavaScript code so output escaping can be added easily.
 
 = 1.9.13 =
 - Added a settings option and a filter to disable the URL validation for the fileurl parameter.

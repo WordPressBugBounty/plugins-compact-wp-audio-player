@@ -8,6 +8,14 @@ if (!is_admin()) {
 }
 add_filter('the_excerpt', 'do_shortcode', 11);
 
+function scap_sanitize_text( $text ) {
+	$text = htmlspecialchars( $text );
+	$text = strip_tags( $text );
+	$text = sanitize_text_field( $text );
+	$text = esc_attr( $text );
+	return $text;
+}
+
 function sc_embed_player_handler($atts, $content = null) {
     extract(shortcode_atts(array(
         'fileurl' => '',
@@ -40,6 +48,8 @@ function sc_embed_player_handler($atts, $content = null) {
             $error_msg = is_object($fileurl) ? $fileurl->get_error_message() : "Error: the fileurl validation failed.";
             return '<div style="color:red;font-weight:bold;">'.$error_msg.'</div>';
         }
+        //If the URL is valid, then we will sanitize it.
+        $fileurl = esc_url($fileurl);
     }
     
     //Default volume
@@ -68,38 +78,39 @@ function sc_embed_player_handler($atts, $content = null) {
 
     if (!empty($autoplay)) {
         $path_to_swf = SC_AUDIO_BASE_URL . 'swf/soundmanager2.swf';
-        $player_cont .= <<<EOT
-<script type="text/javascript" charset="utf-8">
-soundManager.setup({
-	url: '$path_to_swf',
-	onready: function() {
-		var mySound = soundManager.createSound({
-		id: 'btnplay_$ids',
-		volume: '$volume',
-		url: '$fileurl'
-		});
-		var auto_loop = '$loops';
-		mySound.play({
-    		onfinish: function() {
-				if(auto_loop == 'true'){
-					loopSound('btnplay_$ids');
-				}
-				else{
-					document.getElementById('btnplay_$ids').style.display = 'inline';
-					document.getElementById('btnstop_$ids').style.display = 'none';
-				}
-    		}
-		});
-		document.getElementById('btnplay_$ids').style.display = 'none';
-                document.getElementById('btnstop_$ids').style.display = 'inline';
-	},
-	ontimeout: function() {
-		// SM2 could not start. Missing SWF? Flash blocked? Show an error.
-		alert('Error! Audio player failed to load.');
-	}
-});
-</script>
-EOT;
+        ob_start();
+        ?>
+        <script type="text/javascript" charset="utf-8">
+        soundManager.setup({
+            url: "<?php echo esc_url($path_to_swf); ?>",
+            onready: function() {
+                var mySound = soundManager.createSound({
+                    id: "btnplay_<?php echo esc_attr($ids); ?>",
+                    volume: "<?php echo esc_attr($volume); ?>",
+                    url: "<?php echo esc_url($fileurl); ?>"
+                });
+                var auto_loop = "<?php echo $loops; ?>";
+                mySound.play({
+                    onfinish: function() {
+                        if (auto_loop == "true") {
+                            loopSound("btnplay_<?php echo esc_attr($ids); ?>");
+                        } else {
+                            document.getElementById("btnplay_<?php echo esc_attr($ids); ?>").style.display = "inline";
+                            document.getElementById("btnstop_<?php echo esc_attr($ids); ?>").style.display = "none";
+                        }
+                    }
+                });
+                document.getElementById("btnplay_<?php echo esc_attr($ids); ?>").style.display = "none";
+                document.getElementById("btnstop_<?php echo esc_attr($ids); ?>").style.display = "inline";
+            },
+            ontimeout: function() {
+                // SM2 could not start. Missing SWF? Flash blocked? Show an error.
+                alert("Error! Audio player failed to load.");
+            }
+        });
+        </script>
+        <?php
+        $player_cont .= ob_get_clean();
     }//End autopay code
 
     return $player_cont;
