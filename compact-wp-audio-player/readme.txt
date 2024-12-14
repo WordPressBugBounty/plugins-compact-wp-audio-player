@@ -4,7 +4,7 @@ Donate link: https://www.tipsandtricks-hq.com/development-center
 Tags: audio, audio player, embed, media, media player, mp3, mp3 player, music, music player, podcast
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 1.9.14
+Stable tag: 1.9.15
 License: GPLv2 or later
 
 A Compact WP Audio Player Plugin that is compatible with all major browsers and devices (Android, iPhone, iPad)
@@ -67,6 +67,9 @@ Yes
 None
 
 == Changelog ==
+
+= 1.9.15 =
+- Using the `wp_safe_remote_get` function instead of `wp_remote_get` to get the file headers.
 
 = 1.9.14 =
 - Added output escaping to the fileurl shortcode parameter.

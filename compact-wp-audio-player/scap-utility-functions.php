@@ -7,7 +7,7 @@ function contains_non_latin_char($string) {
 }
 
 function scap_verify_file_url_accessible( $file_url ){
-        //Uses wp_remote_get() to check if the file exists and the response code is 200.
+        //Uses wp_safe_remote_get() to check if the file exists and the response code is 200.
         $remote_get_args = array(
                 'method'      => 'HEAD',
                 'timeout'     => 30,
@@ -17,11 +17,11 @@ function scap_verify_file_url_accessible( $file_url ){
 
         $err_msg = '';
                 
-        $data = wp_remote_get( $file_url, $remote_get_args );
+        $data = wp_safe_remote_get( $file_url, $remote_get_args );
         
         if ( is_wp_error( $data ) ) {
                 $err = $data->get_error_message();
-                $err_msg = 'Error occurred when trying to fetch the file using wp_remote_get().' . ' ' . $err ;
+                $err_msg = 'Error occurred when trying to fetch the file using wp_safe_remote_get().' . ' ' . $err ;
                 return $err_msg;
         }
 
