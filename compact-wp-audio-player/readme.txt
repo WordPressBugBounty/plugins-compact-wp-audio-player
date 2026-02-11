@@ -3,7 +3,7 @@ Contributors: Tips and Tricks HQ, mbrsolution
 Donate link: https://www.tipsandtricks-hq.com/development-center
 Tags: audio, audio player, embed, media, media player, mp3, mp3 player, music, music player, podcast
 Requires at least: 5.0
-Tested up to: 6.7
+Tested up to: 6.9
 Stable tag: 1.9.15
 License: GPLv2 or later
 
